@@ -1,9 +1,317 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robot-Reality Check | ICRA 2027 Workshop</title>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --panel: #111827;
+      --panel-border: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --pink: #f472b6;
+      --pink-soft: #1a1028;
+      --pink-glow: rgba(244,114,182,0.15);
+      --green: #34d399;
+      --gold: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      margin: 0;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 50%),
+        radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.6) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 40% 15%, #fff 50%, transparent 50%),
+        radial-gradient(1px 1px at 55% 80%, rgba(255,255,255,0.5) 50%, transparent 50%),
+        radial-gradient(1px 1px at 65% 35%, #fff 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 75% 70%, rgba(244,114,182,0.7) 50%, transparent 50%),
+        radial-gradient(1px 1px at 80% 10%, #fff 50%, transparent 50%),
+        radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,0.6) 50%, transparent 50%),
+        radial-gradient(1px 1px at 15% 85%, #fff 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 35% 45%, rgba(255,255,255,0.4) 50%, transparent 50%),
+        radial-gradient(1px 1px at 50% 5%, #fff 50%, transparent 50%),
+        radial-gradient(1px 1px at 70% 90%, rgba(255,255,255,0.5) 50%, transparent 50%),
+        radial-gradient(1px 1px at 85% 25%, #fff 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 5% 50%, rgba(244,114,182,0.5) 50%, transparent 50%),
+        radial-gradient(1px 1px at 30% 95%, #fff 50%, transparent 50%),
+        radial-gradient(1px 1px at 60% 55%, rgba(255,255,255,0.6) 50%, transparent 50%),
+        radial-gradient(1px 1px at 95% 80%, #fff 50%, transparent 50%),
+        radial-gradient(1px 1px at 45% 75%, rgba(255,255,255,0.4) 50%, transparent 50%),
+        radial-gradient(1px 1px at 20% 40%, #fff 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 88% 65%, rgba(255,255,255,0.5) 50%, transparent 50%);
+      background-attachment: fixed;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 40px 24px 32px; }
+
+    /* ---- Hero: stacked, centered ---- */
+    .hero {
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 40px 32px 32px;
+      background: var(--panel);
+      margin-bottom: 32px;
+      box-shadow: 0 0 40px var(--pink-glow), 0 4px 20px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+    .logo { display: block; margin: 0 auto 20px; }
+    h1 {
+      font-size: 2em;
+      margin: 0 0 8px;
+      letter-spacing: -0.01em;
+    }
+    h1 .accent { color: var(--pink); }
+    .hero p.sub {
+      color: var(--muted);
+      font-size: 1em;
+      margin: 0 0 20px;
+    }
+    .badges { text-align: center; }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--panel-border);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.8em;
+      color: var(--muted);
+      margin: 0 5px 8px 0;
+      background: rgba(255,255,255,0.03);
+    }
+    .badge b { color: var(--text); font-weight: 600; }
+
+    /* ---- Sections ---- */
+    h2 {
+      font-size: 1.25em;
+      margin: 38px 0 14px;
+      color: var(--text);
+    }
+    h2 .num {
+      font-family: "Consolas", "SF Mono", Menlo, monospace;
+      color: var(--pink);
+      margin-right: 8px;
+    }
+    p { color: var(--text); }
+
+    /* ---- Axes ---- */
+    .axis {
+      border-left: 3px solid var(--pink);
+      background: var(--panel);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      border-top: 1px solid var(--panel-border);
+      border-right: 1px solid var(--panel-border);
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .axis .label { font-weight: 600; color: var(--text); }
+    .axis .film {
+      color: var(--pink);
+      font-size: 0.9em;
+      margin-bottom: 4px;
+    }
+    .axis .desc { color: var(--muted); font-size: 0.95em; }
+    .axis .prompt {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: var(--pink-soft);
+      border: 1px solid rgba(244,114,182,0.2);
+      border-radius: 8px;
+      font-size: 0.88em;
+      color: var(--text);
+    }
+    .axis .prompt .tag {
+      font-weight: 600;
+      color: var(--pink);
+      margin-right: 6px;
+    }
+
+    /* ---- Table callout ---- */
+    .table-callout {
+      border: 2px dashed rgba(244,114,182,0.4);
+      border-radius: 12px;
+      padding: 20px 22px;
+      background: var(--panel);
+      margin: 16px 0;
+    }
+    .table-callout h3 { margin: 0 0 8px; font-size: 1.05em; color: var(--text); }
+    .table-callout p { color: var(--muted); font-size: 0.95em; margin: 0 0 10px; }
+    .table-callout table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.85em;
+    }
+    .table-callout th {
+      background: var(--pink-soft);
+      color: var(--pink);
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid var(--panel-border);
+    }
+    .table-callout td {
+      padding: 8px 10px;
+      border: 1px solid var(--panel-border);
+      color: var(--muted);
+    }
+
+    /* ---- Schedule ---- */
+    table.sched { border-collapse: collapse; width: 100%; }
+    table.sched td {
+      padding: 8px 12px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--panel-border);
+      color: var(--text);
+    }
+    table.sched tr:last-child td { border-bottom: none; }
+    .time {
+      font-family: "Consolas", "SF Mono", Menlo, monospace;
+      color: var(--pink);
+      white-space: nowrap;
+      width: 120px;
+      font-size: 0.88em;
+    }
+    .schedule {
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    .schedule tr.highlight td { background: rgba(244,114,182,0.06); }
+
+    /* ---- Speakers ---- */
+    .speaker { margin-bottom: 10px; color: var(--text); }
+    .speaker .name { font-weight: 600; }
+    .speaker .affil { color: var(--muted); }
+    .status {
+      font-family: "Consolas", "SF Mono", Menlo, monospace;
+      font-size: 0.72em;
+      padding: 1px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .status.confirmed { background: rgba(52,211,153,0.15); color: var(--green); }
+    .status.pending   { background: rgba(251,191,36,0.15); color: var(--gold); }
+
+    ul.plain { padding-left: 20px; color: var(--text); }
+    ul.plain li { margin-bottom: 6px; }
+    ul.plain li strong { color: var(--text); }
+    ul.plain li span { color: var(--muted); }
+    a { color: var(--pink); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 44px;
+      padding-top: 16px;
+      border-top: 1px solid var(--panel-border);
+      font-size: 0.85em;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <svg class="logo" width="160" height="130" viewBox="0 0 160 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- TV -->
+      <rect x="93" y="22" width="56" height="44" rx="6" fill="#0a0e1a" stroke="#f472b6" stroke-width="2"/>
+      <rect x="97" y="26" width="48" height="36" rx="3" fill="#1a1028"/>
+      <!-- tiny sci-fi scene on screen: planet + star -->
+      <circle cx="112" cy="40" r="6" fill="#f472b6"/>
+      <ellipse cx="112" cy="40" rx="10" ry="2.5" fill="none" stroke="#e2e8f0" stroke-width="1.2"/>
+      <path d="M136 32 l1.5 3.5 l3.5 0.5 l-2.5 2.5 l0.5 3.5 l-3-1.8 l-3 1.8 l0.5-3.5 l-2.5-2.5 l3.5-0.5 z" fill="#e2e8f0"/>
+      <!-- TV legs -->
+      <line x1="105" y1="66" x2="101" y2="76" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="137" y1="66" x2="141" y2="76" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Robot body -->
+      <rect x="24" y="64" width="46" height="38" rx="12" fill="#111827" stroke="#f472b6" stroke-width="2"/>
+      <!-- Robot head -->
+      <circle cx="47" cy="42" r="23" fill="#111827" stroke="#f472b6" stroke-width="2"/>
+      <!-- Pink eyes looking right at TV -->
+      <circle cx="51" cy="39" r="5" fill="#f472b6"/>
+      <circle cx="64" cy="39" r="5" fill="#f472b6"/>
+      <!-- Eye highlights -->
+      <circle cx="52.5" cy="37.5" r="1.5" fill="#fff"/>
+      <circle cx="65.5" cy="37.5" r="1.5" fill="#fff"/>
+      <!-- Smiling mouth -->
+      <path d="M49 52 q7 6 14 0" stroke="#f472b6" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Antenna -->
+      <line x1="47" y1="19" x2="47" y2="10" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="47" cy="8" r="4" fill="#f472b6"/>
+      <!-- Arms: one pointing at TV -->
+      <line x1="70" y1="78" x2="88" y2="68" stroke="#f472b6" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="90" cy="67" r="5" fill="#f472b6"/>
+      <!-- Other arm resting -->
+      <line x1="24" y1="80" x2="14" y2="92" stroke="#f472b6" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="13" cy="94" r="4.5" fill="#f472b6"/>
+      <!-- Feet -->
+      <rect x="30" y="100" width="13" height="7" rx="3.5" fill="#f472b6"/>
+      <rect x="55" y="100" width="13" height="7" rx="3.5" fill="#f472b6"/>
+      <!-- Glow under robot -->
+      <ellipse cx="47" cy="110" rx="30" ry="4" fill="rgba(244,114,182,0.12)"/>
+    </svg>
+    <h1>Robot-<span class="accent">Reality Check</span></h1>
+    <p class="sub">Measuring Progress Against Sci-Fi Dreams<br>
+    Half-day workshop at ICRA 2027 &middot; Seoul, Korea</p>
+    <div class="badges">
+      <span class="badge"><b>14:00&ndash;18:00</b> afternoon</span>
+      <span class="badge"><b>4</b> capability axes</span>
+      <span class="badge"><b>5</b> expert talks</span>
+      <span class="badge"><b>20</b> posters</span>
+    </div>
+  </div>
+
+  <h2><span class="num">01</span>About</h2>
+  <p>
+    Each invited speaker holds their own system against a fictional archetype
+    from their domain: the autonomous vehicles of <em>Minority Report</em>,
+    Baymax, the exoskeletons of <em>Elysium</em>, the humanoids of <em>Ex Machina</em>.
+    Together we discuss what current systems already match, where hard limits
+    remain, and what we should actually want going forward, treating fiction not
+    only as a target but as a cautionary tale about surveillance, emotional labor,
+    and equity.
+  </p>
+
+  <h2><span class="num">02</span>Capability Axes</h2>
+  <p>
+    The workshop is organized around four capability axes central to robotics,
+    each widely explored in sci-fi media, often far ahead of what current
+    technology delivers. Every 30-minute session pairs a 20-minute expert talk
+    with a 10-minute structured audience discussion. Each discussion opens with
+    a short <strong>ethical prompt</strong> tied to the axis, so ethical
+    implications arise in every session rather than a single talk.
+  </p>
+  <div class="axis"><span class="label">1 &middot; Learning &amp; Decision-Making</span>
+    <div class="film">Sci-fi touchstone: Johnny 5 in <em>Short Circuit</em></div>
+    <div class="desc">How far are learned policies, vision-language-action models, and imitation learning from the fully autonomous, self-directed agents fiction takes for granted?</div>
+    <div class="prompt"><span class="tag">Ethical prompt</span>Who bears the risk when an autonomous system decides?</div></div>
+  <div class="axis"><span class="label">2 &middot; Hardware &amp; Actuation</span>
+    <div class="film">Sci-fi touchstone: the exoskeleton in <em>Elysium</em></div>
+    <div class="desc">Where do actuators, power density, and structural materials actually stand against the effortless, human-amplified bodies of fiction?</div>
+    <div class="prompt"><span class="tag">Ethical prompt</span>Who has access to capability-amplifying technology, and who is left behind?</div></div>
+  <div class="axis"><span class="label">3 &middot; Manipulation &amp; Physical Assistance</span>
+    <div class="film">Sci-fi touchstone: Baymax in <em>Big Hero 6</em></div>
+    <div class="desc">How close are dexterous manipulation and care robots to the gentle, reliable physical assistance fiction has promised for decades?</div>
+    <div class="prompt"><span class="tag">Ethical prompt</span>What is lost, or gained, when a robot's read of your needs becomes the basis for a care decision?</div></div>
+  <div class="axis"><span class="label">4 &middot; Human Perception &amp; Trust</span>
+    <div class="film">Sci-fi touchstone: <em>Robot &amp; Frank</em></div>
+    <div class="desc">What can perception, social cognition, and trust calibration in today's robots really do, and where do they hit hard limits in long-term human coexistence?</div>
+    <div class="prompt"><span class="tag">Ethical prompt</span>Is a robot's read of your emotional state a service or a form of surveillance?</div></div>
+
+  <h2><span class="num">03</span>The Shared Capability Table</h2>
+  <div class="table-callout">
+    <h3>The workshop's central deliverable</h3>
+    <p>
       Throughout the afternoon, the audience fills in a shared table built at
       the front of the room: for each axis, what current systems
       <strong>already match</strong>, where <strong>hard limits</strong> remain,
       and in the final panel, <strong>what we should actually want</strong> going
-      forward. We aim to summarize the workshop findings in a report or paper and
+      forward. aim to summarize the workshop findings in a report or paper and
       the resulting capability table is designed to be updatable: each future
       edition can be compared against the previous one, turning the workshop into
       a small longitudinal benchmark of the sci-fi robotics gap.
