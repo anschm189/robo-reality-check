@@ -5,98 +5,225 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Robot-Reality Check | ICRA 2027 Workshop</title>
   <style>
-    body {
-      font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      color: #222;
-      max-width: 720px;
-      margin: 40px auto;
-      padding: 0 20px;
+    :root {
+      --bg: #0d1117;
+      --panel: #161b27;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --cyan: #58d5f0;
+      --magenta: #f778ba;
+      --gold: #f0c75e;
+      --green: #7ee787;
     }
-    h1 { font-size: 1.8em; margin-bottom: 0.2em; }
-    h2 { font-size: 1.3em; margin-top: 1.5em; border-bottom: 2px solid #eee; padding-bottom: 4px; }
-    .subtitle { color: #555; font-size: 1.05em; margin-top: 0; }
-    .meta { color: #555; margin-bottom: 1.5em; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      margin: 0;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 32px; }
+
+    /* ---- Hero ---- */
+    .hero {
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 36px 32px;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(88,213,240,0.12), transparent 55%),
+        radial-gradient(ellipse at 85% 100%, rgba(247,120,186,0.10), transparent 55%),
+        var(--panel);
+      margin-bottom: 36px;
+    }
+    .hero .tagline {
+      font-family: "Consolas", "SF Mono", Menlo, monospace;
+      color: var(--cyan);
+      font-size: 0.95em;
+      margin: 0 0 12px;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+    }
+    h1 .accent { color: var(--magenta); }
+    .hero p.sub {
+      color: var(--muted);
+      font-size: 1.02em;
+      margin: 0 0 18px;
+    }
     .badge {
       display: inline-block;
-      background: #f0f0f0;
-      border-radius: 4px;
-      padding: 2px 8px;
-      font-size: 0.85em;
-      margin-right: 6px;
+      border: 1px solid #30363d;
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: 0.8em;
+      color: var(--muted);
+      margin: 0 6px 6px 0;
     }
+    .badge b { color: var(--text); font-weight: 600; }
+
+    /* ---- Sections ---- */
+    h2 {
+      font-size: 1.25em;
+      margin: 40px 0 14px;
+      color: var(--text);
+    }
+    h2 .num {
+      font-family: "Consolas", "SF Mono", Menlo, monospace;
+      color: var(--cyan);
+      margin-right: 8px;
+    }
+
+    /* ---- Axes ---- */
+    .axis {
+      border-left: 3px solid var(--cyan);
+      background: var(--panel);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin-bottom: 12px;
+    }
+    .axis:nth-child(2) { border-color: var(--magenta); }
+    .axis:nth-child(3) { border-color: var(--gold); }
+    .axis:nth-child(4) { border-color: var(--green); }
+    .axis .label { font-weight: 600; }
+    .axis .film { color: var(--muted); font-size: 0.92em; }
+    .axis .film em { color: var(--text); }
+
+    /* ---- Schedule ---- */
     table { border-collapse: collapse; width: 100%; }
-    td { padding: 4px 8px 4px 0; vertical-align: top; }
-    .time { white-space: nowrap; color: #555; width: 130px; }
-    footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #eee; font-size: 0.9em; color: #555; }
+    td { padding: 7px 10px; vertical-align: top; border-bottom: 1px solid #21262d; }
+    tr:last-child td { border-bottom: none; }
+    .time {
+      font-family: "Consolas", "SF Mono", Menlo, monospace;
+      color: var(--cyan);
+      white-space: nowrap;
+      width: 130px;
+      font-size: 0.92em;
+    }
+    .schedule {
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    .schedule td { border-bottom-color: #262c36; }
+    .schedule tr.highlight td { background: rgba(88,213,240,0.06); }
+
+    /* ---- Speakers ---- */
+    .speaker { margin-bottom: 10px; }
+    .speaker .name { font-weight: 600; }
+    .speaker .affil { color: var(--muted); }
+    .status {
+      font-family: "Consolas", "SF Mono", Menlo, monospace;
+      font-size: 0.75em;
+      padding: 1px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .status.confirmed { background: rgba(126,231,135,0.15); color: var(--green); }
+    .status.pending   { background: rgba(240,199,94,0.15); color: var(--gold); }
+
+    ul.plain { padding-left: 20px; }
+    ul.plain li { margin-bottom: 6px; }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 44px;
+      padding-top: 16px;
+      border-top: 1px solid #21262d;
+      font-size: 0.85em;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
+<div class="wrap">
 
-  <h1>Robot-Reality Check: Measuring Progress Against Sci-Fi Dreams</h1>
-  <p class="subtitle">A workshop at ICRA 2027 &mdash; Seoul, Korea</p>
-  <p class="meta">
-    <span class="badge">Half-day</span>
-    <span class="badge">Talks + Panel + Poster Session</span>
-  </p>
+  <div class="hero">
+    <p class="tagline">// how close is your robot to sci-fi?</p>
+    <h1>Robot-<span class="accent">Reality Check</span></h1>
+    <p class="sub">Measuring Progress Against Sci-Fi Dreams<br>
+    Half-day workshop at ICRA 2027 &mdash; Seoul, Korea</p>
+    <span class="badge"><b>14:00&ndash;18:00</b> &nbsp;afternoon session</span>
+    <span class="badge"><b>4</b> capability axes</span>
+    <span class="badge"><b>5</b> expert talks</span>
+    <span class="badge"><b>20</b> early-career posters</span>
+  </div>
 
-  <h2>About</h2>
+  <h2><span class="num">01</span>About</h2>
   <p>
-    How close is your robot to sci-fi? This workshop brings together researchers
-    across robotics domains to benchmark current capabilities against the
-    archetypes science fiction has long depicted &mdash; and to treat those
-    same stories as cautionary tales about surveillance, labor, and equity.
-    The central deliverable is a shared capability table: a structured,
-    comparable assessment of what today's systems match, where hard limits
-    remain, and what we should actually want going forward.
+    Each invited speaker holds their own system against a fictional archetype
+    from their domain &mdash; the autonomous vehicles of <em>Minority Report</em>,
+    Baymax, the exoskeletons of <em>Elysium</em>, the humanoids of <em>Ex Machina</em>.
+    Together we discuss what current systems already match, where hard limits
+    remain, and what we should actually want going forward &mdash; treating
+    fiction not only as a target, but as a cautionary tale about surveillance,
+    emotional labor, and equity. The central deliverable is a
+    <strong>shared capability table</strong>: a structured, updatable benchmark
+    of the sci-fi robotics gap, built in the room with the audience.
   </p>
 
-  <h2>Capability Axes</h2>
-  <table>
-    <tr><td><strong>1.</strong></td><td>Learning &amp; Decision-Making <em>(e.g., Johnny 5 in <i>Short Circuit</i>)</em></td></tr>
-    <tr><td><strong>2.</strong></td><td>Hardware &amp; Actuation <em>(e.g., exoskeleton in <i>Elysium</i>)</em></td></tr>
-    <tr><td><strong>3.</strong></td><td>Manipulation &amp; Physical Assistance <em>(e.g., Baymax in <i>Big Hero 6</i>)</em></td></tr>
-    <tr><td><strong>4.</strong></td><td>Human Perception &amp; Trust <em>(e.g., <i>Robot &amp; Frank</i>)</em></td></tr>
-  </table>
+  <h2><span class="num">02</span>Capability Axes</h2>
+  <div class="axis"><span class="label">1 &mdash; Learning &amp; Decision-Making</span>
+    <div class="film">e.g., Johnny 5 in <em>Short Circuit</em></div></div>
+  <div class="axis"><span class="label">2 &mdash; Hardware &amp; Actuation</span>
+    <div class="film">e.g., the exoskeleton in <em>Elysium</em></div></div>
+  <div class="axis"><span class="label">3 &mdash; Manipulation &amp; Physical Assistance</span>
+    <div class="film">e.g., Baymax in <em>Big Hero 6</em></div></div>
+  <div class="axis"><span class="label">4 &mdash; Human Perception &amp; Trust</span>
+    <div class="film">e.g., <em>Robot &amp; Frank</em></div></div>
 
-  <h2>Tentative Schedule</h2>
+  <h2><span class="num">03</span>Tentative Schedule</h2>
+  <div class="schedule">
   <table>
     <tr><td class="time">14:00&ndash;14:10</td><td>Coffee &amp; Arrival</td></tr>
     <tr><td class="time">14:10&ndash;14:30</td><td>Introduction: the Topic and Capability Axes</td></tr>
-    <tr><td class="time">14:30&ndash;15:00</td><td>Axis 1: Autonomy, Learning &amp; Decision-Making</td></tr>
-    <tr><td class="time">15:00&ndash;15:30</td><td>Axis 2: Hardware &amp; Actuation</td></tr>
-    <tr><td class="time">15:30&ndash;16:00</td><td>Axis 3: Manipulation &amp; Physical Assistance</td></tr>
-    <tr><td class="time">16:00&ndash;16:30</td><td>Axis 4: Human Perception &amp; Trust</td></tr>
-    <tr><td class="time">16:30&ndash;16:50</td><td>Humanoid Talk: the Stress Test of All Four Axes</td></tr>
-    <tr><td class="time">16:50&ndash;17:20</td><td>Panel Discussion &amp; Group Discussion with Table Output</td></tr>
+    <tr class="highlight"><td class="time">14:30&ndash;15:00</td><td>Axis 1: Learning &amp; Decision-Making &mdash; <strong>Hyemin Ahn</strong> <span class="status confirmed">confirmed</span></td></tr>
+    <tr class="highlight"><td class="time">15:00&ndash;15:30</td><td>Axis 2: Hardware &amp; Actuation &mdash; <strong>Francesco Ferro</strong> <span class="status confirmed">confirmed</span></td></tr>
+    <tr class="highlight"><td class="time">15:30&ndash;16:00</td><td>Axis 3: Manipulation &amp; Physical Assistance &mdash; <strong>Tamin Asfour</strong> <span class="status confirmed">confirmed</span></td></tr>
+    <tr class="highlight"><td class="time">16:00&ndash;16:30</td><td>Axis 4: Human Perception &amp; Trust &mdash; <strong>Allison Okamura</strong> <span class="status pending">pending</span></td></tr>
+    <tr class="highlight"><td class="time">16:30&ndash;16:50</td><td>Humanoid Talk: the Stress Test of All Four Axes &mdash; <strong>Jemin Hwangbo</strong> <span class="status pending">pending</span></td></tr>
+    <tr><td class="time">16:50&ndash;17:20</td><td>Panel Discussion &amp; Group Discussion with Table Output<br><span style="color:var(--muted)">moderated by Christian Ott (TU Vienna) &amp; Harsimran Singh (DLR)</span></td></tr>
     <tr><td class="time">17:20&ndash;17:50</td><td>Networking &amp; Poster Session</td></tr>
     <tr><td class="time">17:50&ndash;18:00</td><td>Closing Remarks</td></tr>
   </table>
+  </div>
 
-  <h2>Speakers</h2>
-  <ul>
-    <li>Hyemin Ahn &mdash; Pohang University, Korea <em>(Learning &amp; Decision-Making)</em></li>
-    <li>Francesco Ferro &mdash; PAL Robotics, Spain <em>(Hardware &amp; Actuation)</em></li>
-    <li>Christopher Atkeson &mdash; CMU, USA <em>(Manipulation &amp; Physical Assistance)</em></li>
-    <li>Ayanna Howard &mdash; Georgia Tech, USA <em>(Human Perception &amp; Trust)</em></li>
-    <li>Dr. Junho Oh &mdash; Korea <em>(Humanoid Talk)</em></li>
+  <h2><span class="num">04</span>Speakers</h2>
+  <div class="speaker"><span class="name">Hyemin Ahn</span> <span class="status confirmed">confirmed</span><br><span class="affil">Pohang University, Korea &mdash; Learning &amp; Decision-Making</span></div>
+  <div class="speaker"><span class="name">Francesco Ferro</span> <span class="status confirmed">confirmed</span><br><span class="affil">PAL Robotics, Spain &mdash; Hardware &amp; Actuation</span></div>
+  <div class="speaker"><span class="name">Tamin Asfour</span> <span class="status confirmed">confirmed</span><br><span class="affil">KIT, Germany &mdash; Manipulation &amp; Physical Assistance</span></div>
+  <div class="speaker"><span class="name">Allison Okamura</span> <span class="status pending">pending</span><br><span class="affil">Stanford University, USA &mdash; Human Perception &amp; Trust</span></div>
+  <div class="speaker"><span class="name">Jemin Hwangbo</span> <span class="status pending">pending</span><br><span class="affil">KAIST, Korea &mdash; Humanoid Talk</span></div>
+
+  <h2><span class="num">05</span>Organizers</h2>
+  <ul class="plain">
+    <li><strong>Annika Schmidt</strong> &mdash; German Aerospace Center (DLR), Germany</li>
+    <li><strong>Jongseok Lee</strong> &mdash; Nanyang Technological University (NTU), Singapore</li>
+    <li><strong>Hrishik Mishra</strong> &mdash; German Aerospace Center (DLR), Germany</li>
+    <li><strong>Adrian Stoica</strong> &mdash; NASA Jet Propulsion Laboratory, USA</li>
   </ul>
 
-  <h2>Organizers</h2>
-  <ul>
-    <li>Annika Schmidt &mdash; German Aerospace Center (DLR), Germany</li>
-    <li>Jongseok Lee &mdash; Nanyang Technological University (NTU), Singapore</li>
-    <li>Hrishik Mishra &mdash; German Aerospace Center (DLR), Germany</li>
-    <li>Adrian Stoica &mdash; NASA Jet Propulsion Laboratory, USA</li>
-  </ul>
+  <h2><span class="num">06</span>Posters</h2>
+  <p>
+    Up to 20 posters, specifically aimed at early-career researchers. Each poster
+    addresses at least one capability axis and states which sci-fi depiction it
+    benchmarks against. Call for posters opens upon acceptance of the workshop.
+  </p>
 
-  <h2>Contact</h2>
+  <h2><span class="num">07</span>Contact</h2>
   <p><a href="mailto:annika.schmidt@dlr.de">annika.schmidt@dlr.de</a></p>
 
   <footer>
-    This workshop is a new event. If successful, we intend to run it regularly,
-    with the capability table as a recurring, updatable benchmark across editions.
+    A new event, intended to run regularly: the shared capability table is designed
+    to be updatable, so each edition becomes a longitudinal benchmark of the
+    sci-fi robotics gap.
   </footer>
 
+</div>
 </body>
 </html>
